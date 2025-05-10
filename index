@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Invitation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Roboto:wght@400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f7f4ef;
+            overflow-x: hidden;
+        }
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-family: 'Dancing Script', cursive;
+            background-color: #fffc0029; /* Цвет блоков */
+            color: #333333;
+            border-radius: 15px;
+            margin: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .title {
+            font-size: 4rem;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        .description {
+            font-size: 1.5rem;
+            color: #666666;
+        }
+        .form-section {
+            background-color: #ffffff;
+            padding: 40px 30px;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 -10px 20px rgba(0,0,0,0.15);
+            text-align: center;
+            position: relative;
+            width: 100%;
+            z-index: 10;
+            margin-top: 40px;
+        }
+        input, select, button {
+            width: 80%;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            font-family: 'Roboto', sans-serif;
+        }
+        button {
+            background-color: #a0522d;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #8b4513;
+        }
+    </style>
+</head>
+<body>
+    <div class="section" id="intro">
+        <div>
+            <div class="title">Вы приглашены!</div>
+            <div class="description">Приходите разделить с нами этот незабываемый день</div>
+        </div>
+    </div>
+    <div class="section" id="date">
+        <div>
+            <div class="title">Дата и Время</div>
+            <div class="description">10 августа 2025, 17:00</div>
+        </div>
+    </div>
+    <div class="section" id="location">
+        <div>
+            <div class="title">Место</div>
+            <div class="description">Сад «Ривьера», ул. Цветочная, 123</div>
+            <!-- Гиперссылка на Яндекс.Карты -->
+            <a href="https://yandex.ru/maps/213/moscow/?text=%D1%81%D0%B0%D0%B4%20%D1%80%D0%B8%D0%B2%D1%8C%D0%B5%D1%80%D0%B0%2C%20%D1%83%D0%BB.%20%D1%86%D0%B2%D0%B5%D1%82%D0%BE%D1%87%D0%BD%D0%B0%D1%8F%2C%20123&ll=37.622504%2C55.755160&z=16" target="_blank">Посмотреть на карте</a>
+        </div>
+    </div>
+    <div class="form-section" id="rsvp">
+        <h2>Подтвердите ваше присутствие</h2>
+        <form id="rsvpForm" onsubmit="sendToTelegram(event)">
+            <input type="text" name="name" placeholder="Фамилия и Имя" required><br>
+            <select name="status" required>
+                <option value="">Вы планируете быть с нами?</option>
+                <option value="Приду">Приду</option>
+                <option value="Не смогу">Не смогу</option>
+            </select><br>
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+    <script>
+        function sendToTelegram(event) {
+            event.preventDefault();
+            const form = document.getElementById('rsvpForm');
+            const name = form.name.value.trim();
+            const status = form.status.value;
+            const message = `Новая заявка на свадьбу!\nИмя: ${name}\nСтатус: ${status}`;
+            const botToken = '8056825042:AAHqR_scr3AmFac2M_7gBjcZ4ugTTUqYR5w';
+            const chatId = '184974663';
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: message })
+            })
+            .then(() => {
+                alert('Ваш ответ отправлен! Спасибо!');
+                form.reset();
+            })
+            .catch(() => {
+                alert('Произошла ошибка, попробуйте снова.');
+            });
+        }
+    </script>
+</body>
+</html>
